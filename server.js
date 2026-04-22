@@ -224,7 +224,6 @@ app.get('*', (req, res) => {
 
 // ─── Startup self-test ───────────────────────────────────────────────────────
 async function selfTest(key) {
-  // Tiny 1x1 white PNG
   const tiny = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwADhQGAWjR9awAAAABJRU5ErkJggg==';
   const model = 'gemini-2.0-flash';
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
@@ -247,24 +246,30 @@ async function selfTest(key) {
     } else {
       const msg = json?.error?.message || json?.error?.status || r.statusText;
       console.error(`❌ Gemini API error (${r.status}): ${msg}`);
-      console.error('   → Check your GEMINI_API_KEY in .env file');
+      console.error('   → Check your GEMINI_API_KEY in .env or Vercel environment variables');
     }
   } catch (e) {
     console.error('❌ Network error reaching Gemini:', e.message);
   }
 }
 
-// ─── Start ────────────────────────────────────────────────────────────────────
-app.listen(PORT, async () => {
-  console.log(`\n🚀 InkMind Recognition Server`);
-  console.log(`   http://localhost:${PORT}`);
-  console.log(`\n🔑 Gemini keys loaded: ${geminiKeys.length}`);
-  if (!geminiKeys.length) {
-    console.warn('\n⚠️  Add GEMINI_API_KEY to your .env file!');
-    console.warn('   Get free key at: https://aistudio.google.com/app/apikey\n');
-  } else {
-    console.log('🧪 Running self-test...');
-    await selfTest(geminiKeys[0]);
-    console.log('');
-  }
-});
+// ─── Export for Vercel (serverless) + local start ─────────────────────────────
+module.exports = app;
+
+// Only start the HTTP server when running locally (not on Vercel)
+if (process.env.NODE_ENV !== 'production' || process.env.LOCAL_DEV === 'true') {
+  app.listen(PORT, async () => {
+    console.log(`\n🚀 InkMind Recognition Server`);
+    console.log(`   http://localhost:${PORT}`);
+    console.log(`\n🔑 Gemini keys loaded: ${geminiKeys.length}`);
+    if (!geminiKeys.length) {
+      console.warn('\n⚠️  Add GEMINI_API_KEY to your .env file!');
+      console.warn('   Get free key at: https://aistudio.google.com/app/apikey\n');
+    } else {
+      console.log('🧪 Running self-test...');
+      await selfTest(geminiKeys[0]);
+      console.log('');
+    }
+  });
+}
+
