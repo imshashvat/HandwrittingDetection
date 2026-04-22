@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InkMind — Recognize Handwriting</title>
+  <meta name="description" content="Draw on canvas or upload images to recognize handwriting with InkMind AI Recognition Engine.">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✍️</text></svg>">
+</head>
+<body>
+  <!-- App Navbar -->
+  <nav class="app-navbar">
+    <div class="container">
+      <a href="/" class="app-nav-logo">
+        <div class="logo-icon">✍️</div>
+        <span>Ink<span class="gradient-text">Mind</span></span>
+      </a>
+      <div class="app-nav-actions">
+        <button class="btn btn-secondary" id="historyToggle" title="View History">📋 History</button>
+        <a href="/" class="btn btn-ghost">← Home</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Toast Notifications -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Main App -->
+  <div class="app-layout">
+    <main class="app-main">
+
+      <!-- Mode Tabs -->
+      <div class="mode-tabs">
+        <button class="mode-tab active" data-mode="draw" id="drawTab">🎨 Draw on Canvas</button>
+        <button class="mode-tab" data-mode="upload" id="uploadTab">📤 Upload Image</button>
+      </div>
+
+      <!-- Workspace -->
+      <div class="workspace">
+
+        <!-- ====== LEFT PANEL ====== -->
+        <div class="input-area">
+
+          <!-- ── Canvas Panel ── -->
+          <div class="canvas-panel active" id="canvasPanel">
+            <!-- Toolbar -->
+            <div class="canvas-toolbar">
+              <!-- Tools -->
+              <div class="toolbar-group">
+                <button class="tool-btn active" data-tool="pen" id="penTool" title="Pen (P)">✏️</button>
+                <button class="tool-btn" data-tool="eraser" id="eraserTool" title="Eraser (E)">🧹</button>
+              </div>
+              <div class="toolbar-divider"></div>
+              <!-- Color Presets -->
+              <div class="toolbar-group color-presets" id="colorPresets">
+                <div class="color-preset active" data-color="#000000" style="background:#000000;" title="Black"></div>
+                <div class="color-preset" data-color="#1e40af" style="background:#1e40af;" title="Blue"></div>
+                <div class="color-preset" data-color="#dc2626" style="background:#dc2626;" title="Red"></div>
+                <div class="color-preset" data-color="#16a34a" style="background:#16a34a;" title="Green"></div>
+                <div class="color-preset" data-color="#7c3aed" style="background:#7c3aed;" title="Purple"></div>
+                <div class="color-preset" data-color="#ea580c" style="background:#ea580c;" title="Orange"></div>
+              </div>
+              <!-- Custom Color -->
+              <div class="color-picker-wrapper">
+                <div class="color-picker-btn" id="colorPickerBtn" style="background:#000000;" title="Custom Color"></div>
+                <input type="color" id="colorPicker" value="#000000">
+              </div>
+              <div class="toolbar-divider"></div>
+              <!-- Brush Size -->
+              <div class="size-slider">
+                <span title="Brush size">🖊</span>
+                <input type="range" id="brushSize" min="1" max="20" value="3" title="Brush Size">
+                <span class="size-label" id="sizeLabel">3px</span>
+              </div>
+              <div class="toolbar-divider"></div>
+              <!-- Undo / Redo / Clear -->
+              <div class="toolbar-group">
+                <button class="tool-btn" id="undoBtn" title="Undo (Ctrl+Z)">↩️</button>
+                <button class="tool-btn" id="redoBtn" title="Redo (Ctrl+Y)">↪️</button>
+                <button class="tool-btn" id="clearBtn" title="Clear Canvas" style="color:#ef4444;">🗑️</button>
+              </div>
+            </div>
+            <!-- Canvas -->
+            <div class="canvas-container" id="canvasContainer">
+              <canvas id="drawingCanvas"></canvas>
+              <div class="canvas-hint" id="canvasHint">
+                <span>✍️ Start drawing here…</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Upload Panel ── -->
+          <div class="upload-panel" id="uploadPanel">
+            <!-- Drop Zone (shown when no image) -->
+            <div class="upload-zone" id="uploadZone">
+              <div class="upload-icon">📁</div>
+              <h3 class="upload-title">Drop your image here</h3>
+              <p class="upload-desc">or click anywhere in this box to browse</p>
+              <div class="upload-formats">
+                <span class="format-tag">JPG</span>
+                <span class="format-tag">PNG</span>
+                <span class="format-tag">WebP</span>
+                <span class="format-tag">BMP</span>
+              </div>
+              <p class="upload-desc" style="font-size:0.8rem;margin-top:0.5rem;">💡 You can also paste an image with Ctrl+V</p>
+              <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/bmp,image/gif">
+            </div>
+            <!-- Preview (shown when image is loaded) -->
+            <div class="image-preview-container" id="imagePreview">
+              <img id="previewImage" alt="Uploaded image for handwriting recognition">
+              <div class="preview-actions">
+                <button id="changeImageBtn">🔄 Change Image</button>
+                <button id="removeImage" style="background:rgba(239,68,68,0.7);">✕ Remove</button>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /input-area -->
+
+        <!-- ====== RIGHT PANEL — Results ====== -->
+        <div class="results-panel">
+
+          <!-- Recognize Button -->
+          <button class="recognize-btn" id="recognizeBtn">
+            <span id="recognizeBtnText">🔍 Recognize Handwriting</span>
+          </button>
+
+          <!-- Results Card -->
+          <div class="result-card" id="resultCard">
+            <!-- Empty State -->
+            <div class="result-empty" id="resultEmpty">
+              <div class="empty-icon">📝</div>
+              <p>Draw or upload an image, then click<br><strong>"Recognize Handwriting"</strong></p>
+            </div>
+            <!-- Filled State -->
+            <div id="resultContent" style="display:none; flex-direction:column; gap:1rem;">
+              <div class="result-header">
+                <h3>📄 Recognized Text</h3>
+                <div class="result-actions">
+                  <button id="copyBtn">📋 Copy</button>
+                </div>
+              </div>
+              <div id="confidenceContainer"></div>
+              <div class="recognized-text" id="recognizedText"></div>
+              <div id="analysisContainer" style="display:none;">
+                <div class="analysis-label">🔬 Analysis</div>
+                <div class="analysis-text" id="analysisText"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- History Section -->
+          <div class="history-section" id="historySection" style="display:none;">
+            <div class="history-header">
+              <h4>📋 Recent Recognitions</h4>
+              <button class="btn btn-ghost" id="clearHistory" style="font-size:0.75rem;">Clear All</button>
+            </div>
+            <div class="history-list" id="historyList"></div>
+          </div>
+
+        </div><!-- /results-panel -->
+
+      </div><!-- /workspace -->
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/canvas.js"></script>
+  <script src="js/upload.js"></script>
+</body>
+</html>

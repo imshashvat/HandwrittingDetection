@@ -1,0 +1,6 @@
+node_modules/
+.env
+.DS_Store
+test-models.js
+test-gemini.js
+*.log

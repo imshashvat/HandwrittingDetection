@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InkMind — AI Handwriting Recognition</title>
+  <meta name="description" content="Recognize handwriting instantly using AI. Draw on canvas or upload images — powered by Grok Vision AI.">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/landing.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✍️</text></svg>">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="/" class="nav-logo">
+        <div class="logo-icon">✍️</div>
+        <span>Ink<span class="gradient-text">Mind</span></span>
+      </a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="app.html" class="btn btn-primary nav-cta">Launch App →</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+    <canvas id="particles-canvas"></canvas>
+    <div class="hero-content container">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Powered by Grok Vision AI
+      </div>
+      <h1 class="hero-title">
+        Transform <span class="gradient-text">Handwriting</span><br>
+        Into Digital Text
+      </h1>
+      <p class="hero-subtitle">
+        Draw on canvas or upload images — our AI instantly recognizes and transcribes 
+        handwritten text, mathematical expressions, and sketches with remarkable accuracy.
+      </p>
+      <div class="hero-actions">
+        <a href="app.html" class="btn btn-primary btn-lg" id="cta-primary">
+          ✨ Start Recognizing
+        </a>
+        <a href="#features" class="btn btn-secondary btn-lg" id="cta-secondary">
+          Learn More ↓
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-value gradient-text" id="stat-accuracy">99%</div>
+          <div class="stat-label">Recognition Accuracy</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value gradient-text" id="stat-speed">&lt;2s</div>
+          <div class="stat-label">Processing Time</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value gradient-text" id="stat-languages">50+</div>
+          <div class="stat-label">Languages Supported</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-header animate-in">
+        <div class="section-label">⚡ Features</div>
+        <h2 class="section-title">Everything You Need for<br><span class="gradient-text">Handwriting Recognition</span></h2>
+        <p class="section-desc">Powerful tools to capture, recognize, and convert handwritten content into editable digital text.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card glass-card animate-in">
+          <div class="feature-icon purple">🎨</div>
+          <h3 class="feature-title">Canvas Drawing</h3>
+          <p class="feature-desc">Draw directly on an interactive canvas with customizable pen colors, sizes, and an eraser. Touch and stylus support included.</p>
+        </div>
+        <div class="feature-card glass-card animate-in">
+          <div class="feature-icon cyan">📤</div>
+          <h3 class="feature-title">Image Upload</h3>
+          <p class="feature-desc">Upload images via drag-and-drop, file picker, or clipboard paste. Supports JPG, PNG, WebP, and BMP formats.</p>
+        </div>
+        <div class="feature-card glass-card animate-in">
+          <div class="feature-icon pink">🤖</div>
+          <h3 class="feature-title">AI-Powered Analysis</h3>
+          <p class="feature-desc">Grok Vision AI analyzes your handwriting with confidence scoring, language detection, and detailed text extraction.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="container">
+      <div class="section-header animate-in">
+        <div class="section-label">🔄 Process</div>
+        <h2 class="section-title">How It <span class="gradient-text">Works</span></h2>
+        <p class="section-desc">Three simple steps to convert your handwriting into digital text.</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card animate-in" style="position:relative;">
+          <div class="step-number">1</div>
+          <h3 class="step-title">Draw or Upload</h3>
+          <p class="step-desc">Write on the interactive canvas using your mouse, touchscreen, or stylus. Or upload an image of handwritten text.</p>
+          <div class="step-connector"></div>
+        </div>
+        <div class="step-card animate-in" style="position:relative;">
+          <div class="step-number">2</div>
+          <h3 class="step-title">AI Processes</h3>
+          <p class="step-desc">Grok Vision AI analyzes the image, detecting characters, words, and structure with advanced multimodal understanding.</p>
+          <div class="step-connector"></div>
+        </div>
+        <div class="step-card animate-in">
+          <div class="step-number">3</div>
+          <h3 class="step-title">Get Results</h3>
+          <p class="step-desc">Receive the transcribed text with confidence scores. Copy to clipboard, view analysis details, and save to history.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container cta-content animate-in">
+      <h2 class="cta-title">Ready to <span class="gradient-text">Digitize</span> Your Handwriting?</h2>
+      <p class="cta-desc">Start recognizing handwritten text in seconds. No sign-up required.</p>
+      <a href="app.html" class="btn btn-primary btn-lg" id="cta-bottom">🚀 Launch InkMind App</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-text">Built with ❤️ using <a href="https://x.ai" target="_blank">Grok Vision AI</a> · © 2025 InkMind</p>
+    </div>
+  </footer>
+
+  <script src="js/landing.js"></script>
+</body>
+</html>
