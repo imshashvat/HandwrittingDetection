@@ -78,23 +78,26 @@ async function callGemini(imageBase64, mimeType, userPrompt) {
   const key = getGeminiKey();
   if (!key) throw { code: 'no_key' };
 
-  // Models to try in order
+  // Confirmed available models from the API (in order of preference)
   const models = [
+    'gemini-2.5-flash',
     'gemini-2.0-flash',
-    'gemini-1.5-flash',
-    'gemini-1.5-flash-latest',
-    'gemini-1.5-pro',
+    'gemini-2.0-flash-lite',
+    'gemini-2.5-flash-lite',
   ];
 
   for (const model of models) {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
+
+    // Force JPEG mime type for canvas images (Gemini works better with jpeg)
+    const safeMime = (mimeType === 'image/png' || mimeType === 'image/jpeg') ? mimeType : 'image/jpeg';
 
     const body = {
       contents: [{
         parts: [
           {
             inline_data: {
-              mime_type: mimeType || 'image/png',
+              mime_type: safeMime,
               data: imageBase64,
             },
           },
